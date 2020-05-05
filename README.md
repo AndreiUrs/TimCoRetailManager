@@ -19,10 +19,11 @@ In order to let it grow, it will be based upon WebAPI layer.
 
 
 **Technologies included**
-+ Unit Testing
-+ Dependency Injection
-+ WPF
-+ ASP.NET MVC
++ Unit Testing - XUnit
++ SOLID and IOC principles
++ Dependency Injection -- Autofac
++ WPF -- MVVM
++ ASP.NET 
 + .NET Core
 + SSDT
 + Git
