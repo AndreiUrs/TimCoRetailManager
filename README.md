@@ -8,7 +8,7 @@ In order to let it grow, it will be based upon WebAPI layer.
 
 
 **Contains**
-+Git on GitHub + Azure Devops(POC)
-+SQL Database (SSDT)
-+WebAPI (including authentication)
-+WPF application that can log into the API
++ Git on GitHub + Azure Devops(POC)
++ SQL Database (SSDT)
++ WebAPI (including authentication)
++ WPF application that can log into the API
