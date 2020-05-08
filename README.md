@@ -22,7 +22,7 @@ In order to let it grow, it will be based upon WebAPI layer.
 + Unit Testing - XUnit
 + SOLID and IOC principles
 + Dependency Injection -- Autofac
-+ WPF -- MVVM
++ WPF -- MVVM and Caliburn
 + ASP.NET 
 + .NET Core
 + SSDT
