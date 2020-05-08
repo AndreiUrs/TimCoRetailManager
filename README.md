@@ -31,7 +31,7 @@ In order to let it grow, it will be based upon WebAPI layer.
 + Design Patterns
 + Async
 + Reporting
-+ WebAPI
++ WebAPI -- Swagger
 + Logging
 + Data Validation
 + HTML and CSS
