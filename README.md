@@ -19,21 +19,21 @@ In order to let it grow, it will be based upon WebAPI layer.
 
 
 **Technologies included**
++ WPF(MVVM and Caliburn)
++ ASP.NET WebAPI and MVC(Swagger)
++ Object Relational Mapper(Dapper)
 + Unit Testing - XUnit
 + SOLID and IOC principles
-+ Dependency Injection -- Autofac
-+ WPF -- MVVM and Caliburn
-+ ASP.NET 
-+ .NET Core
-+ SSDT
-+ Git
-+ GitHub and Azure DevOps
++ Dependency Injection(Autofac)
++ .NET Core and .NET Frameworks
++ SSDT(Server Sql Data Tables)
++ Git( GitHub and Azure DevOps)
 + Design Patterns
 + Async
 + Reporting
-+ WebAPI -- Swagger
 + Logging
 + Data Validation
 + HTML and CSS
 + JavaScript
 + Authentication
++ Dapper
