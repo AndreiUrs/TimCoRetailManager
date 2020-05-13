@@ -11,7 +11,6 @@ namespace TRMDesktopUI.ViewModels
     public class SalesViewModel : Screen
     {
         private BindingList<string> _products;
-
         public BindingList<string> Products
         {
             get { return _products; }
@@ -22,8 +21,8 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
-        private BindingList<string> _cart;
 
+        private BindingList<string> _cart;
         public BindingList<string> Cart
         {
             get { return _cart; }
@@ -33,9 +32,8 @@ namespace TRMDesktopUI.ViewModels
         }
 
 
-        private string _itemQuantity;
-
-        public string ItemQuantity
+        private int _itemQuantity;
+        public int ItemQuantity
         {
             get { return _itemQuantity; }
             set
@@ -45,19 +43,17 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
+        
         public string SubTotal
         {
             //replace with calculations
             get => "$0.00";
         }
-
-
         public string Tax
         {
             //replace with calculations
             get => "$0.00";
         }
-
         public string Total
         {
             //replace with calculations
@@ -90,7 +86,6 @@ namespace TRMDesktopUI.ViewModels
                 return output;
             }
         }
-
         public void RemoveFromCart()
         {
 
@@ -106,7 +101,6 @@ namespace TRMDesktopUI.ViewModels
                 return output;
             }
         }
-
         public void CheckOut()
         {
 
