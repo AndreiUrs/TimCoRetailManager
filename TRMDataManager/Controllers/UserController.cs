@@ -15,10 +15,10 @@ namespace TRMDataManager.Controllers
         [HttpGet]
         public UserModel GetById()
         {
-           var userId = RequestContext.Principal.Identity.GetUserId();
-           UserData data = new UserData();
+            var userId = RequestContext.Principal.Identity.GetUserId();
+            UserData data = new UserData();
 
-           return data.GetUserById(userId).First();
+            return data.GetUserById(userId).First();
         }
 
     }
