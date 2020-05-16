@@ -26,17 +26,19 @@ namespace TRMDesktopUI.ViewModels
         }
 
 
-        private BindingList<ProductModel> _cart;
-        public BindingList<ProductModel> Cart
+        private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
+        public BindingList<CartItemModel> Cart
         {
             get { return _cart; }
-            set { _cart = value;
+            set
+            {
+                _cart = value;
                 NotifyOfPropertyChange(() => Cart);
             }
         }
 
 
-        private int _itemQuantity;
+        private int _itemQuantity = 1;
 
         public int ItemQuantity
         {
@@ -45,14 +47,24 @@ namespace TRMDesktopUI.ViewModels
             {
                 _itemQuantity = value;
                 NotifyOfPropertyChange(() => ItemQuantity);
+                NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
 
-        
+
         public string SubTotal
         {
             //replace with calculations
-            get => "$0.00";
+            get
+            {
+                decimal subTotal = 0;
+                foreach (var item in Cart)
+                {
+                    subTotal += item.Product.RetailPrice * item.QuantityInCart;
+                }
+
+                return subTotal.ToString("C");
+            }
         }
         public string Tax
         {
@@ -73,12 +85,37 @@ namespace TRMDesktopUI.ViewModels
                 bool output = false;
                 //Make sure something is selected
                 //Make sure there is an item quantity
+                if (ItemQuantity > 0 && SelectedProduct?.QuantityInStock >= ItemQuantity)
+                {
+                    output = true;
+                }
                 return output;
             }
         }
         public void AddToCart()
         {
+            CartItemModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
+            if(existingItem != null)
+            {
+                existingItem.QuantityInCart += ItemQuantity;
+                ////Hack -- find a better way to refresh the cart display
+                Cart.Remove(existingItem);
+                Cart.Add(existingItem);
+            }
+            else
+            {
+                CartItemModel item = new CartItemModel()
+                {
+                    Product = SelectedProduct,
+                    QuantityInCart = ItemQuantity
+                };
+                Cart.Add(item);
+            }
 
+            SelectedProduct.QuantityInStock -= ItemQuantity;
+            ItemQuantity = 1;
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Cart);
         }
 
 
@@ -93,7 +130,7 @@ namespace TRMDesktopUI.ViewModels
         }
         public void RemoveFromCart()
         {
-
+            NotifyOfPropertyChange(() => SubTotal);
         }
 
 
@@ -110,7 +147,7 @@ namespace TRMDesktopUI.ViewModels
         {
 
         }
-        
+
         public SalesViewModel(IProductEndpoint productEndpoint)
         {
             _productEndpoint = productEndpoint;
@@ -127,6 +164,19 @@ namespace TRMDesktopUI.ViewModels
             var productList = await _productEndpoint.GetAll();
             Products = new BindingList<ProductModel>(productList);
         }
+
+        private ProductModel _selectedProduct;
+
+        public ProductModel SelectedProduct
+        {
+            get { return _selectedProduct; }
+            set
+            {
+                _selectedProduct = value;
+                NotifyOfPropertyChange(() => SelectedProduct);
+            }
+        }
+
 
     }
 }
