@@ -4,21 +4,21 @@ Tim Correy retail manager -- full stack minimum vial product proof of concept
 
 
 
-##Description
+## Description
 Desktop application that runs a cash register, handles inventory and manager the entire store.
 In order to let it grow, it will be based upon WebAPI layer.
 
 
 
 
-##Journey
+## Journey
 + Git on GitHub + Azure Devops(POC)
 + SQL Database (SSDT)
 + WebAPI (including authentication)
 + WPF application that can log into the API
 
 
-##Technologies included
+## Technologies included
 + WPF (MVVM with Caliburn and Micro)
 + ASP.NET WebAPI and MVC(Swagger)
 + Object Relational Mapper(Dapper)
