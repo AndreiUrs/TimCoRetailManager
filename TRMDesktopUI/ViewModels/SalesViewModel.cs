@@ -6,13 +6,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TRMDesktopUI.Library.Api;
+using TRMDesktopUI.Library.Helpers;
 using TRMDesktopUI.Library.Models;
 
 namespace TRMDesktopUI.ViewModels
 {
     public class SalesViewModel : Screen
     {
-        private IProductEndpoint _productEndpoint;
+        private readonly IProductEndpoint _productEndpoint;
+        private readonly IConfigHelper _configHelper;
+
+        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
+        {
+            _productEndpoint = productEndpoint;
+            _configHelper = configHelper;
+        }
+
 
         private BindingList<ProductModel> _products;
         public BindingList<ProductModel> Products
@@ -54,27 +63,46 @@ namespace TRMDesktopUI.ViewModels
 
         public string SubTotal
         {
-            //replace with calculations
-            get
-            {
-                decimal subTotal = 0;
-                foreach (var item in Cart)
-                {
-                    subTotal += item.Product.RetailPrice * item.QuantityInCart;
-                }
-
-                return subTotal.ToString("C");
-            }
+            get => CalculateSubTotal().ToString("C");            
         }
+
+        private decimal CalculateSubTotal()
+        {
+            decimal subTotal = 0;
+            foreach (var item in Cart)
+            {
+                subTotal += item.Product.RetailPrice * item.QuantityInCart;
+            }
+            return subTotal;
+        }
+
         public string Tax
         {
-            //replace with calculations
-            get => "$0.00";
+            get => CalculateTax().ToString("C");
         }
+
+        private decimal CalculateTax()
+        {
+            decimal taxAmount = 0;
+            decimal taxRate = _configHelper.GetTaxRate() / 100;
+
+            foreach (var item in Cart)
+            {
+                if (item.Product.IsTaxable)
+                {
+                    taxAmount += item.Product.RetailPrice * item.QuantityInCart * taxRate;
+                }
+            }
+            return taxAmount;
+        }
+
         public string Total
         {
-            //replace with calculations
-            get => "$0.00";
+            get
+            {
+                decimal total = CalculateSubTotal() + CalculateTax();
+                return total.ToString("C");
+            }
         }
 
 
@@ -95,7 +123,7 @@ namespace TRMDesktopUI.ViewModels
         public void AddToCart()
         {
             CartItemModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
-            if(existingItem != null)
+            if (existingItem != null)
             {
                 existingItem.QuantityInCart += ItemQuantity;
                 ////Hack -- find a better way to refresh the cart display
@@ -115,7 +143,8 @@ namespace TRMDesktopUI.ViewModels
             SelectedProduct.QuantityInStock -= ItemQuantity;
             ItemQuantity = 1;
             NotifyOfPropertyChange(() => SubTotal);
-            NotifyOfPropertyChange(() => Cart);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
         }
 
 
@@ -131,6 +160,8 @@ namespace TRMDesktopUI.ViewModels
         public void RemoveFromCart()
         {
             NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
         }
 
 
@@ -146,11 +177,6 @@ namespace TRMDesktopUI.ViewModels
         public void CheckOut()
         {
 
-        }
-
-        public SalesViewModel(IProductEndpoint productEndpoint)
-        {
-            _productEndpoint = productEndpoint;
         }
 
         protected override async void OnViewLoaded(object view)
