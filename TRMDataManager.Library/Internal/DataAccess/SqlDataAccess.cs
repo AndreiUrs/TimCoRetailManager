@@ -28,7 +28,7 @@ namespace TRMDataManager.Library.Internal.DataAccess
             }
         }
 
-        public void Save<T>(string storedProcedure, T parameters, string connectionStringName)
+        public void SaveData<T>(string storedProcedure, T parameters, string connectionStringName)
         {
             var connectionString = GetConnectionString(connectionStringName);
 
