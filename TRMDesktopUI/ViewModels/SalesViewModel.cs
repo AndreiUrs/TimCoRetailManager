@@ -15,11 +15,13 @@ namespace TRMDesktopUI.ViewModels
     {
         private readonly IProductEndpoint _productEndpoint;
         private readonly IConfigHelper _configHelper;
+        private readonly ISaleEndpoint _saleEndpoint;
 
-        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
+        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper,ISaleEndpoint saleEndpoint)
         {
             _productEndpoint = productEndpoint;
             _configHelper = configHelper;
+            _saleEndpoint = saleEndpoint;
         }
 
 
@@ -142,6 +144,8 @@ namespace TRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
+
         }
 
 
@@ -159,6 +163,7 @@ namespace TRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
 
 
@@ -167,13 +172,27 @@ namespace TRMDesktopUI.ViewModels
             get
             {
                 bool output = false;
-                //Make sure something in the cart
+                if(Cart.Count >0)
+                {
+                    output = true;
+                }
                 return output;
             }
         }
-        public void CheckOut()
+        public async Task CheckOut()
         {
+            SaleModel sale = new SaleModel();
 
+            foreach (var item in Cart)
+            {
+                sale.SaleDetails.Add(new SaleDetailModel()
+                {
+                    ProductId = item.Product.Id,
+                    Quantity = item.QuantityInCart
+                });
+            }
+
+            await _saleEndpoint.PostSale(sale);
         }
 
         protected override async void OnViewLoaded(object view)
