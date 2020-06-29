@@ -156,7 +156,7 @@ namespace TRMDesktopUI.ViewModels
             {
                 bool output = false;
                 //Make sure something is selected
-                if (SelectedCartItem != null && SelectedCartItem?.Product.QuantityInStock > 0) output = true;
+                if (SelectedCartItem != null && SelectedCartItem?.QuantityInCart > 0) output = true;
                 return output;
             }
         }
@@ -176,6 +176,7 @@ namespace TRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
             NotifyOfPropertyChange(() => CanCheckOut);
+            NotifyOfPropertyChange(() => CanAddToCart);
         }
 
 
@@ -205,6 +206,7 @@ namespace TRMDesktopUI.ViewModels
             }
 
             await _saleEndpoint.PostSale(sale);
+            await ResetSalesViewModel();
         }
 
         protected override async void OnViewLoaded(object view)
@@ -246,6 +248,18 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
+        private async Task ResetSalesViewModel()
+        {
+            Cart = new BindingList<CartItemDisplayModel>();
+            //TODO : add clearing the selected cart item if it does not do itself
+
+            await LoadProducts();
+
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
+        }
 
     }
 }
