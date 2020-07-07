@@ -16,12 +16,14 @@ namespace TRMDesktopUI.ViewModels
         private IEventAggregator _events;
         private ILoggedInUserModel _user;
         private SalesViewModel _salevVM;
+        private IAPIHelper _apiHelper;
 
-        public ShellViewModel(IEventAggregator events,SalesViewModel salevVM,SimpleContainer container,ILoggedInUserModel user)
+        public ShellViewModel(IEventAggregator events,SalesViewModel salevVM,SimpleContainer container,ILoggedInUserModel user,IAPIHelper apiHelper)
         {
             _salevVM = salevVM;
             _events = events;
             _user = user;
+            _apiHelper = apiHelper;
 
             _events.Subscribe(this);
 
@@ -41,7 +43,8 @@ namespace TRMDesktopUI.ViewModels
 
         public void LogOut()
         {
-            _user.LogOffUser();
+            _user.ResetUserModel();
+            _apiHelper.LogOffUser();
             ActivateItem(IoC.Get<LoginViewModel>());
             NotifyOfPropertyChange(() => IsLoggedIn);
         }
