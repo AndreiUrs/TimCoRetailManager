@@ -1,5 +1,5 @@
 # TimCo Retail Manager - MPV 
-Tim Correy retail manager -- full stack minimum vial product proof of concept 
+Tim Correy retail manager -- full stack minimum vial product proof of concept
 
 
 
